@@ -1,4 +1,4 @@
-const products = [];
+const Product=require("../models/Product")
 exports.getAddPRoduct=(req, res, next) => {
     res.render('add-product', {
       pageTitle: 'Add Product',
@@ -9,17 +9,20 @@ exports.getAddPRoduct=(req, res, next) => {
     });
   }
 exports.PostProduct=(req, res, next) => {
-    products.push({ title: req.body.title });
+   const product=new Product(req.body.title)
+   product.save()
     res.redirect('/');
   }
 exports.getProduct=(req, res, next) => {
-   
-    res.render('shop', {
-      prods: products,
-      pageTitle: 'Shop',
-      path: '/',
-      hasProducts: products.length > 0,
-      activeShop: true,
-      productCSS: true
-    });
+    const products=Product.fetchall(products=>{
+      res.render('shop', {
+        prods: products,
+        pageTitle: 'Shop',
+        path: '/',
+        hasProducts: products.length > 0,
+        activeShop: true,
+        productCSS: true
+      });
+    })
+    
   }
